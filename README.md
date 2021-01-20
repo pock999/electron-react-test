@@ -1,3 +1,10 @@
+### TODO:
+
+ - sqlite
+ - sequelize
+ - saga with ipc
+ - ipc methods encapsulation（local api = like ajax methods）
+
 # react with electron
 參考：https://medium.com/@devesu/how-to-build-a-react-based-electron-app-d0f27413f17f
 
