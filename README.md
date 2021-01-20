@@ -71,5 +71,7 @@
 
 參考：
 https://www.electronjs.org/docs/api/ipc-main
+
 https://dev.to/origamium/reactelectron-2gdo
+
 https://qiita.com/r-nouchi/items/c5ebfa42dca23e559ce2
