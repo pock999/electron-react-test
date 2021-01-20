@@ -65,3 +65,11 @@
     "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
  ```
+
+
+## ipc
+
+參考：
+https://www.electronjs.org/docs/api/ipc-main
+https://dev.to/origamium/reactelectron-2gdo
+https://qiita.com/r-nouchi/items/c5ebfa42dca23e559ce2
