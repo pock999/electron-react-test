@@ -32,7 +32,13 @@
   let mainWindow;
 
   function createWindow() {
-    mainWindow = new BrowserWindow({ width: 900, height: 680 });
+    mainWindow = new BrowserWindow({
+      width: 900,
+      height: 680,
+      webPreferences: {
+        enableRemoteModule: true
+      },
+    });
     mainWindow.loadURL(
       isDev
         ? "http://localhost:3000"
@@ -72,7 +78,9 @@
     "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
  ```
+## 踩雷點
 
+ - react-router要用HashRouter，不能用BrowserRouter
 
 ## ipc
 
