@@ -37,13 +37,13 @@ const component = (props) => {
   };
 
   const IpcAsyncTest = () => {
-    console.log('--- SEND view => IpcAsyncTest ---');
-    props.ipcAsyncMsgAction('從view發送的Async Msg');
+    console.log(`--- 從view發送${'**從view發送的Async Msg**'} ---`);
+    props.ipcAsyncMsgAction('**從view發送的Async Msg**');
   };
 
   const IpcSyncTest = () => {
-    console.log('--- SEND view => IpcSyncTest ---');
-    props.ipcSyncMsgAction('從view發送的Sync Msg');
+    console.log(`--- 從view發送${'**從view發送的Sync Msg**'} ---`);
+    props.ipcSyncMsgAction('**從view發送的Sync Msg**');
   };
 
   return (

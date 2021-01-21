@@ -27,7 +27,7 @@ export const passToAccountSagaLogoutAction = (payload) => {
 };
 
 export const passToIpcRendererSagaAsyncTestMsgAction = (payload) => {
-  console.log('--- SEND SagaAction => IpcAsyncTest ---');
+  console.log(`--- 從view接收${payload}，並從SagaAction發送 ---`);
   console.log(`${fileName}passToIpcRendererSagaAsyncTestMsgAction`);
   return {
     type: IPC_ASYNC_TEST,
@@ -36,7 +36,7 @@ export const passToIpcRendererSagaAsyncTestMsgAction = (payload) => {
 };
 
 export const passToIpcRendererSagaSyncTestMsgAction = (payload) => {
-  console.log('--- SEND SagaAction => IpcSyncTest ---');
+  console.log(`--- 從view接收${payload}，並從SagaAction發送 ---`);
   console.log(`${fileName}passToIpcRendererSagaSyncTestMsgAction`);
   return {
     type: IPC_SYNC_TEST,
