@@ -81,6 +81,47 @@
 ## 踩雷點
 
  - react-router要用HashRouter，不能用BrowserRouter
+ - 監聽的Saga要用fork，除此之外，在fork的監聽Saga function裡面，還要使用eventChannel，並將ipcRenderer.on放在eventChannel內，然後在while true裡面dispatch至reducer
+ ```
+  function* IpcAsyncReply() {
+    console.log(`${sagaName}IpcAsyncReply`);
+
+    // 先建立eventChannel的生成方法，內含ipc的非同步接收事件
+    const myChannel = () => {
+      return eventChannel(emit => {
+        ipcRenderer.on('async-reply', (event, arg) => {
+          console.log(`--- async-reply 從ipc收到${arg} ---`);
+          emit({
+            message: arg,
+          });
+        })
+        return () => {};
+      });
+    }
+    
+    try {
+      const channel = yield call(myChannel);
+      while (true) {
+        // 取得待更改的payload
+        const payload = yield take(channel);
+
+        // 更動redux
+        yield put(showDebugStore(payload));
+      }
+    } catch(e) {
+      console.error("ipc connection disconnected with unknown error");
+    }
+  }
+
+  // ...
+
+  export default [
+    // 因為要被動接收，所以必須要fork出去，避免阻塞
+    fork(IpcAsyncReply),
+    // ...
+  ];
+
+ ```
 
 ## ipc
 
