@@ -9,7 +9,7 @@ import {
   takeEvery,
 } from 'redux-saga/effects';
 
-import { eventChannel } from "redux-saga";
+import { eventChannel, buffers } from "redux-saga";
 
 import {
   UserException,
@@ -20,7 +20,12 @@ import {
   AccessStorage,
 } from '../../../utility';
 
-const { ipcRenderer } = window.require("electron");
+import {
+  showDebugStore,
+  clearDebugStore,
+} from '../../reducers';
+
+const { ipcRenderer, remote } = window.require("electron");
 
 const sagaName = 'sagas/TestSaga/';
 
@@ -28,18 +33,24 @@ export const IPC_ASYNC_TEST = 'IPC_RENDERER_SAGA/IPC_ASYNC_TEST';
 export const IPC_SYNC_TEST = 'IPC_RENDERER_SAGA/IPC_SYNC_TEST'; 
 
 function* IpcAsyncReply() {
-
   console.log(`${sagaName}IpcAsyncReply`);
-
-  try {
-    const channel = yield eventChannel(emit => {
+  const myChannel = () => {
+    return eventChannel(emit => {
       ipcRenderer.on('async-reply', (event, arg) => {
-        console.log('async-reply ====> ', arg);
+        console.log('==== async-reply ====> ', arg);
+        emit({
+          message: arg,
+        });
       })
       return () => {};
     });
+  }
+  
+  try {
+    const channel = yield call(myChannel);
     while (true) {
-      yield take(channel)
+      const payload = yield take(channel);
+      yield put(showDebugStore(payload));
     }
   } catch(e) {
     console.error("ipc connection disconnected with unknown error");
@@ -49,8 +60,11 @@ function* IpcAsyncReply() {
 function* IpcAsyncTestMsg(action) {
   console.log('--- SEND IpcRendererSaga => IpcAsyncTest ---');
   console.log(`${sagaName}IpcAsyncTestMsg`);
-
   const { payload } = action;
+
+  // alert(remote.getGlobal('MyGlobalObject').test_vvv)
+
+  yield put(clearDebugStore({}));
 
   const ipcSender = () => {
     ipcRenderer.send('async-test-msg', payload);
@@ -66,6 +80,8 @@ function* IpcSyncTestMsg(action) {
 
   const { payload } = action;
 
+  yield put(clearDebugStore({}));
+
   const ipcSender = () => {
     return ipcRenderer.sendSync('sync-test-msg', payload);
   };
@@ -73,6 +89,10 @@ function* IpcSyncTestMsg(action) {
   const reply = yield call(ipcSender);
 
   console.log('result reply ==> ', reply);
+
+  yield put(showDebugStore({
+    message: reply,
+  }));
 
 }
 

@@ -19,12 +19,14 @@ import {
 } from '../../store/sagas/SagaActions';
 
 const component = (props) => {
-  console.log('Home props => ');
-  console.log(props);
+  // console.log('Home props => ');
+  // console.log(props);
 
-  console.log('checkAuthPass => ', checkAuthPass());
+  // console.log('checkAuthPass => ', checkAuthPass());
 
-  console.log('route => ', window.location.href);
+  // console.log('route => ', window.location.href);
+
+  console.log(props.DebugStore);
 
   const loginTest = () => {
     props.loginTestAction({});
@@ -47,6 +49,7 @@ const component = (props) => {
   return (
     <>
       <div style={{ backgroundColor: 'white' }}>
+        <h1>Debug Message : { props.DebugStore.message || '' }</h1>
         Home
         <Link to='/about'>前往About</Link>
         <button onClick={loginTest}>測試登入按鈕saga</button>
@@ -60,8 +63,10 @@ const component = (props) => {
 
 const mapStateToProps = ({
   AuthStore,
+  DebugStore,
 }) => ({
   AuthStore,
+  DebugStore,
 });
 
 const mapDispatchToProps = (dispatch) => ({

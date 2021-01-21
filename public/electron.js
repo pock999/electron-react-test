@@ -28,6 +28,10 @@ function createWindow() {
   mainWindow.on("closed", () => (mainWindow = null));
 }
 
+global.MyGlobalObject = {
+  test_vvv: 'test_vvv => 12345',
+}
+
 app.on("ready", createWindow);
 
 app.on("window-all-closed", () => {
