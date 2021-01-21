@@ -1,9 +1,12 @@
+const init = require('./api/init');
+
 const electron = require("electron");
 const { ipcMain } = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const isDev = require("electron-is-dev");
+const UtilService = require('./api/services/UtilService');
 
 let mainWindow;
 
@@ -32,6 +35,8 @@ global.MyGlobalObject = {
   test_vvv: 'test_vvv => 12345',
 }
 
+init.initializeSequelize();
+
 app.on("ready", createWindow);
 
 app.on("window-all-closed", () => {
@@ -46,14 +51,21 @@ app.on("activate", () => {
   }
 });
 
-ipcMain.on('async-test-msg', (event, arg) => {
+ipcMain.on('async-test-msg', async(event, arg) => {
   console.log('electron.js, async-test-msg === arg ==> ');
   console.log(arg);
-  event.reply('async-reply', `回應 async-test-msg ${arg}`)
+  event.reply('async-reply', `回應 async-test-msg ${arg}`);
+
+  // await User.create({
+  //   account: 'test',
+  //   password: 'test',
+  // });
 });
 
 ipcMain.on('sync-test-msg', (event, arg) => {
   console.log('electron.js, sync-test-msg === arg ==> ');
   console.log(arg);
   event.returnValue = `回應 sync-test-msg ${arg}`;
+
+  // UtilService.test();
 });
