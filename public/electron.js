@@ -1,4 +1,5 @@
 const electron = require("electron");
+const { ipcMain } = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
@@ -11,7 +12,8 @@ function createWindow() {
     width: 900,
     height: 680,
     webPreferences: {
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      nodeIntegration: true,
     },
   });
 
@@ -38,4 +40,16 @@ app.on("activate", () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+ipcMain.on('async-test-msg', (event, arg) => {
+  console.log('electron.js, async-test-msg === arg ==> ');
+  console.log(arg);
+  event.reply('async-reply', `回應 async-test-msg ${arg}`)
+});
+
+ipcMain.on('sync-test-msg', (event, arg) => {
+  console.log('electron.js, sync-test-msg === arg ==> ');
+  console.log(arg);
+  event.returnValue = `回應 sync-test-msg ${arg}`;
 });

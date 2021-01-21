@@ -13,6 +13,9 @@ import {
 import {
   passToAccountSagaLoginAction,
   passToAccountSagaLogoutAction,
+
+  passToIpcRendererSagaAsyncTestMsgAction,
+  passToIpcRendererSagaSyncTestMsgAction,
 } from '../../store/sagas/SagaActions';
 
 const component = (props) => {
@@ -31,6 +34,16 @@ const component = (props) => {
     props.logoutTestAction({});
   };
 
+  const IpcAsyncTest = () => {
+    console.log('--- SEND view => IpcAsyncTest ---');
+    props.ipcAsyncMsgAction('從view發送的Async Msg');
+  };
+
+  const IpcSyncTest = () => {
+    console.log('--- SEND view => IpcSyncTest ---');
+    props.ipcSyncMsgAction('從view發送的Sync Msg');
+  };
+
   return (
     <>
       <div style={{ backgroundColor: 'white' }}>
@@ -38,6 +51,8 @@ const component = (props) => {
         <Link to='/about'>前往About</Link>
         <button onClick={loginTest}>測試登入按鈕saga</button>
         <button onClick={logoutTest}>測試登出按鈕saga</button>
+        <button onClick={IpcAsyncTest}>測試ipc async saga</button>
+        <button onClick={IpcSyncTest}>測試ipc sync saga</button>
       </div>
     </>
   );
@@ -56,6 +71,12 @@ const mapDispatchToProps = (dispatch) => ({
   logoutTestAction(payload) {
     dispatch(passToAccountSagaLogoutAction(payload));
   },
+  ipcAsyncMsgAction(payload) {
+    dispatch(passToIpcRendererSagaAsyncTestMsgAction(payload));
+  },
+  ipcSyncMsgAction(payload) {
+    dispatch(passToIpcRendererSagaSyncTestMsgAction(payload));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(component);
